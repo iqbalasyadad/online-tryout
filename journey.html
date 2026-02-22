@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beranda – CPNS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/home_styles.css">
+
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-left">
+      <div class="nav-web-logo-container">
+        <img src="src/logo.png" alt="logo">
+      </div>
+      <a href="#" class="active">Beranda</a>
+      <a href="#">Aktivitas</a>
+      <a href="#">Pembelian</a>
+      <a href="#">Akun</a>
+    </div>
+    <div class="nav-right">
+      <a href="#">Mode: CPNS</a>
+      <a href="#">Bahasa</a>
+      <a href="#">Keluar</a>
+    </div>
+  </nav>
+
+  <!-- LAYOUT -->
+  <div class="layout-container">
+    <div class="layout">
+
+      <!-- SIDEBAR LEFT (fixed) -->
+      <aside class="sidebar-left">
+        <div class="card">
+          <div class="menu-item">
+            <img src="src/icons/Path.svg" width="20" height="20">
+            Journey
+          </div>
+          <div class="menu-item">
+            <img src="src/icons/Book.svg" width="20" height="20">
+            Latihan Soal
+          </div>
+          <div class="menu-item">
+            <img src="src/icons/BookOpenText.svg" width="20" height="20">
+            Materi
+          </div>
+          <div class="menu-item">
+            <img src="src/icons/Certificate.svg" width="20" height="20">
+            Try Out
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT (scrollable) -->
+      <main class="main-content">
+        <div class="journey-container">
+          <div class="sidemenu-content-header">
+            <img src="src/icons/Path.svg" width="20" height="20">
+            Journey          
+          </div>
+
+        </div>
+        
+      </main>
+
+
+      <!-- SIDEBAR RIGHT (fixed) -->
+      <aside class="sidebar-right">
+        <div class="profile-card">
+          <div class="avatar">
+            <svg width="22" height="22" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>
+          </div>
+          <div class="profile-info">
+            <div class="name">Hanggar Zeppelin</div>
+            <div class="email">hanggarzeppelin@gmail.com</div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+
+</body>
+
+<script>
+  let currentIndex = 0;
+  const slides = document.querySelectorAll('.slider-track img');
+  const dots = document.querySelectorAll('.slider-dot');
+  const track = document.getElementById('sliderTrack');
+
+  // Function to update slide position
+  function updateSlide(index) {
+    currentIndex = index;
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    
+    // Update dots
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  // Auto-slide logic
+  let slideInterval = setInterval(() => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    updateSlide(currentIndex);
+  }, 4000);
+
+  // Manual navigation (resets timer)
+  function manualNav(index) {
+    clearInterval(slideInterval); // Stop auto-slide when user clicks
+    updateSlide(index);
+    
+    // Restart auto-slide after a delay
+    slideInterval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateSlide(currentIndex);
+    }, 4000);
+  }
+
+
+</script>
+
+</html>
