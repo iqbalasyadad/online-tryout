@@ -10,6 +10,7 @@
     --sidebar-w: 300px;
     --sidebar-right-w: 320px;
     --theme: #4781b0;
+    --header-background: url("../assets/images/header_background.svg");
 }
 
 body {
@@ -124,11 +125,9 @@ nav a.active {
 
 /* ── MAIN CONTENT (scrollable) ── */
 .main-content {
-    /* max-width: 700px; */
-    /* flex: 1; */
     padding: 0px 25px;
     overflow-y: auto;
-    /* display: flex; */
+    /* border: 1px solid red; */
     
 }
 
@@ -155,7 +154,7 @@ nav a.active {
 .content-card {
     background: var(--surface);
     border-radius: 0.75rem;
-    padding: 20px 10px;
+    padding: 20px 20px;
     box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }
 
@@ -345,18 +344,81 @@ nav a.active {
 }
 
 .journey-container {
-    border: 1px solid green;
+    /* border: 1px solid green; */
     margin-top: 0;
-    padding-top: 0;
+    padding: 0;
     width: 700px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* background-color: rgb(255, 255, 255); */
 }
 
 .sidemenu-content-header {
     height: 75px;
     width: 100%;
-    background-color: rgb(199, 199, 199);
+    /* background-color: rgb(199, 199, 199); */
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    background-image: var(--header-background);
+}
+
+.sidemenu-content-body {
+    padding: 20px;
+    background-color: #FAFAFA;
+    /* height: 100%; */
+}
+
+.search-container {
+    display: flex;
+    height: 40px;     /* Unified height for both elements */
+    padding: 0 15px;
+    /* background-color: #FAFAFA; */
+}
+
+.search-container input {
+    flex: 1;          /* Takes up all available space except the button */
+    padding: 0 15px;
+    border: 1px solid #ccc;
+    border-right: none; /* Merges the input with the button */
+    border-radius: 0.75rem 0 0 0.75rem;
+    outline: none;
+}
+
+.search-container button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 0 0.75rem 0.75rem 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-container button:hover {
+    background: #eee;
+}
+
+.search-container button img {
+    display: block;
+}
+
+.journey-search-result-container {
+    flex: 1;
+    background-color: #FAFAFA;
+    /* border: 1px solid blue; */
+    overflow-y: auto;
+    padding: 0 15px;
+}
+
+.journey-search-result-container::-webkit-scrollbar {
+    width: 6px;
+}
+.journey-search-result-container::-webkit-scrollbar-thumb {
+    background-color: #cfcfcf;
+    border-radius: 10px;
 }
