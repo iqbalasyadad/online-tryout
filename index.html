@@ -9,8 +9,9 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f0f0ee;
+      --bg: #f6f6f6;
       --surface: #ffffff;
+      --panel-body: #fafafa;
       --text: #1a1a1a;
       --muted: #888;
       --theme: #4781b0;
@@ -163,17 +164,33 @@
       padding: 16px 20px;
       flex-direction: column;
       align-items: center;
+      /* border: 1px solid red; */
     }
     .content-panel::-webkit-scrollbar { width: 0; }
     .content-panel.active { display: flex; }
 
     /* All panels share this same capped width — consistent across all views */
+
     .panel-inner {
       width: 100%;
       max-width: var(--content-max);
       display: flex;
       flex-direction: column;
       gap: 16px;
+      border: 1px solid rgb(228, 151, 8) ;
+    }
+
+    .panel-inner-result {
+      background: var(--panel-body);
+      width: 100%;
+      max-width: var(--content-max);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      border: 1px solid rgb(124, 8, 219);
+      padding: 20px 20px;
+      /* overflow-y: auto; */
+      /* height: 100%; */
     }
 
     /* ══ CARDS ══ */
@@ -197,6 +214,7 @@
 
     /* ══ CONTENT ROWS ══ */
     .content-row {
+      background: var(--surface);
       display: grid;
       grid-template-columns: auto 1fr auto;
       gap: 12px;
@@ -273,7 +291,7 @@
     }
 
     .search-bar {
-      display: flex; height: 40px; margin-bottom: 12px;
+      display: flex; height: 40px; margin: 0px 20px 0px 20px;
     }
     .search-bar input {
       flex: 1; padding: 0 14px; border: 1px solid #ddd; border-right: none;
@@ -345,6 +363,11 @@
       background: rgba(0,0,0,0.35); z-index: 150;
     }
     .sidebar-overlay.open { display: block; }
+
+    #panel-journey {
+      /* border: 1px solid blue; */
+      background-color: var(--bg);
+    }
 
     /* ══ TABLET (≤900px) ══ */
     @media (max-width: 900px) {
@@ -634,32 +657,156 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4781b0" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6l9-3 9 3M3 18l9 3 9-3"/></svg>
               Journey
             </div>
+
             <div class="search-bar">
               <input type="search" placeholder="Cari Journey...">
               <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
             </div>
-            <div class="content-row">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
-              <div class="content-row-body">
-                <span class="content-row-title">Road to CPNS</span>
-                <div class="content-row-meta">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                  <span>0/14 section telah dikerjakan</span>
+
+            <div class="panel-inner-result">
+
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/14 section telah dikerjakan</span>
+                  </div>
                 </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-            <div class="content-row">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
-              <div class="content-row-body">
-                <span class="content-row-title">Road to CPNS Premium</span>
-                <div class="content-row-meta">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                  <span>0/20 section telah dikerjakan</span>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS Premium</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/20 section telah dikerjakan</span>
+                  </div>
                 </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/14 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS Premium</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/20 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/14 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS Premium</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/20 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/14 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS Premium</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/20 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/14 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS Premium</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/20 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/14 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="content-row">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                <div class="content-row-body">
+                  <span class="content-row-title">Road to CPNS Premium</span>
+                  <div class="content-row-meta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>0/20 section telah dikerjakan</span>
+                  </div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+
             </div>
+
+
+
+
+
+
+
+
           </div>
         </div>
 
