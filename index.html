@@ -184,7 +184,7 @@
       max-width: var(--content-max);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      /* gap: 16px; */
       background: var(--panel-bg);
       flex: 1;
       min-height: 0;
@@ -208,7 +208,19 @@
       padding: 10px;
       margin-top: 20px;
       height: 100%;
-      /* display: none; */
+      display: none;
+    }
+    .page-content--navmenu-body.active { display: flex; }
+    
+    .page-content--sidemenu-body {
+      background: var(--panel-bg);
+      gap: 10px;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      /* margin-top: 20px; */
+      height: 100%;
+      /* border: 1px solid; */
     }
 
     /* Scrollable list inside sidemenu pages */
@@ -270,12 +282,6 @@
       padding: 3px 10px; border-radius: 0 .6rem 0 .6rem;
       font-size: 11px; font-weight: 700;
     }
-    .row-buy-history {
-      /* position: absolute; top: 0; right: 0; */
-      padding: 3px 10px; border-radius: 0 .6rem 0 .6rem;
-      font-size: 11px; font-weight: 700;
-      border: 1px solid;
-    }
 
     .btn-start {
       background: var(--theme); color: #fff;
@@ -323,7 +329,7 @@
       display: flex; align-items: center; justify-content: center; gap: 8px;
       font-size: 15px; font-weight: 700; color: var(--theme);
       background: linear-gradient(135deg, #e8f0f7 0%, #f0f5fa 100%);
-      height: 64px; margin-bottom: 12px;
+      min-height: 64px;
     }
 
     .search-bar {
@@ -445,7 +451,7 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.06);
     }
 
-    .tab-btn {
+    .tab-pembelian-btn {
       flex: 1;
       display: flex;
       align-items: center;
@@ -465,23 +471,23 @@
       user-select: none;
     }
 
-    .tab-btn:hover {
+    .tab-pembelian-btn:hover {
       background: #f0f4f8;
       color: #7a9fc0;
     }
 
-    .tab-btn.active {
+    .tab-pembelian-btn.active {
       background: #dbeafe;
       color: #4781b0;
       font-weight: 600;
     }
 
-    .tab-btn svg {
+    .tab-pembelian-btn svg {
       flex-shrink: 0;
       opacity: 0.75;
     }
 
-    .tab-btn.active svg {
+    .tab-pembelian-btn.active svg {
       opacity: 1;
     }
 
@@ -494,7 +500,7 @@
       border: 1px solid #e8e8e8;
       cursor: pointer;
       transition: background 0.15s;
-      /* margin-bottom: 8px; */
+      margin-bottom: 8px;
     }
     .row-pembelian-riwayat-top {
       display: flex;
@@ -524,8 +530,28 @@
     .row-pembelian-riwayat-body {
       display: flex; flex-direction: row;
     }
-    .row-pembelian-riwayat-harga { font-size: 14px; font-weight: 600; color: #00d370; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .row-pembelian-riwayat-paket { font-size: 14px; font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .row-pembelian-riwayat-harga { font-size: 14px; font-weight: 600; color: #00d370; }
+    .row-pembelian-riwayat-paket { font-size: 14px; font-weight: 600; color: #334155; }
+
+    .row-pembelian-paket-aktif {
+      display: flex;
+      flex-direction: column;      
+      background: var(--surface);
+      padding: 14px 16px;
+      border-radius: .6rem;
+      border: 1px solid #e8e8e8;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 8px;
+    }
+
+    .row-pembelian-paket-aktif-body-logo {
+      margin: 5px 5px 0px 0px;
+    }
+    .row-pembelian-paket-aktif-body {
+      display: flex; flex-direction: row;
+    }
+    .row-pembelian-paket-aktif-paket { font-size: 14px; font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   </style>
 </head>
@@ -753,8 +779,8 @@
 
             <nav class="tab-nav" role="tablist">
 
-              <!-- Beli Paket -->
-              <button class="tab-btn active" role="tab" onclick="switchTab(this)">
+              <!-- Beli Paket Button -->
+              <button class="tab-pembelian-btn active" role="tab" data-nav="beli-paket" onclick="switchPembelianNav(event, 'beli-paket')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
                   <line x1="3" y1="6" x2="21" y2="6"/>
@@ -763,8 +789,8 @@
                 Beli Paket
               </button>
 
-              <!-- Riwayat -->
-              <button class="tab-btn" role="tab" onclick="switchTab(this)">
+              <!-- Riwayat Button-->
+              <button class="tab-pembelian-btn" role="tab" data-nav="riwayat" onclick="switchPembelianNav(event, 'riwayat')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10"/>
                   <polyline points="12 6 12 12 16 14"/>
@@ -772,8 +798,8 @@
                 Riwayat
               </button>
 
-              <!-- Paket Aktif -->
-              <button class="tab-btn" role="tab" onclick="switchTab(this)">
+              <!-- Paket Aktif Button-->
+              <button class="tab-pembelian-btn" role="tab" data-nav="paket-aktif" onclick="switchPembelianNav(event, 'paket-aktif')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                   <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
@@ -785,7 +811,7 @@
 
             <!-- BELI PAKET -->
 
-            <div id="page-pembelian-belipaket" class="page-content--navmenu-body">
+            <div id="page-pembelian-beli-paket" class="page-content--navmenu-body active">
               <div class="search-bar">
                 <input type="search" placeholder="Cari Paket...">
                 <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
@@ -818,19 +844,58 @@
                     </div>
                     <span class="row-pembelian-riwayat-status-text">SUCCESS</span>
                   </div>
+                  <hr style="margin: 10px 0px; background-color: yellowgreen;">
                   <div class="row-pembelian-riwayat-body">
                     <div class="tx-logo" aria-hidden="true">
                       <svg class="row-pembelian-riwayat-body-logo" width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 11V6C9 4.34315 10.3431 3 12 3C13.6569 3 15 4.34315 15 6V10.9673M10.4 21H13.6C15.8402 21 16.9603 21 17.816 20.564C18.5686 20.1805 19.1805 19.5686 19.564 18.816C20 17.9603 20 16.8402 20 14.6V12.2C20 11.0799 20 10.5198 19.782 10.092C19.5903 9.71569 19.2843 9.40973 18.908 9.21799C18.4802 9 17.9201 9 16.8 9H7.2C6.0799 9 5.51984 9 5.09202 9.21799C4.71569 9.40973 4.40973 9.71569 4.21799 10.092C4 10.5198 4 11.0799 4 12.2V14.6C4 16.8402 4 17.9603 4.43597 18.816C4.81947 19.5686 5.43139 20.1805 6.18404 20.564C7.03968 21 8.15979 21 10.4 21Z" stroke="#bababa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-
                     </div>
+                    <div class="row-pembelian-riwayat-body-main">
+                      <div class="row-pembelian-riwayat-harga">Rp. 133.000</div>
+                      <span class="row-pembelian-riwayat-paket">
+                        Program Bimbel SKB Kementrian ESDM CPNS 2024 - Masa Aktif 1 Bulan
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
+                <div class="row-pembelian-riwayat">
+                  <div class="row-pembelian-riwayat-top">
+                    <div class="row-pembelian-riwayat-top-left">
+                      <svg class="row-pembelian-riwayat-top-logo" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#bababa" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      <span class="row-pembelian-riwayat-top-text">6 Des 2024 10:10&nbsp;&nbsp;#jadiasn-463403</span>
+                    </div>
+                    <span class="row-pembelian-riwayat-status-text">SUCCESS</span>
+                  </div>
+                  <hr style="margin: 10px 0px; background-color: yellowgreen;">
+                  <div class="row-pembelian-riwayat-body">
+                    <div class="tx-logo" aria-hidden="true">
+                      <svg class="row-pembelian-riwayat-body-logo" width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 11V6C9 4.34315 10.3431 3 12 3C13.6569 3 15 4.34315 15 6V10.9673M10.4 21H13.6C15.8402 21 16.9603 21 17.816 20.564C18.5686 20.1805 19.1805 19.5686 19.564 18.816C20 17.9603 20 16.8402 20 14.6V12.2C20 11.0799 20 10.5198 19.782 10.092C19.5903 9.71569 19.2843 9.40973 18.908 9.21799C18.4802 9 17.9201 9 16.8 9H7.2C6.0799 9 5.51984 9 5.09202 9.21799C4.71569 9.40973 4.40973 9.71569 4.21799 10.092C4 10.5198 4 11.0799 4 12.2V14.6C4 16.8402 4 17.9603 4.43597 18.816C4.81947 19.5686 5.43139 20.1805 6.18404 20.564C7.03968 21 8.15979 21 10.4 21Z" stroke="#bababa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </div>
                     <div class="row-pembelian-riwayat-body-main">
                       <div class="row-pembelian-riwayat-harga">Rp. 133.000</div>
                       <div class="row-pembelian-riwayat-paket">
                         Program Bimbel SKB Kementrian ESDM CPNS 2024 - Masa Aktif 1 Bulan
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <!-- PAKET AKTIF -->
+            <div id="page-pembelian-paket-aktif" class="page-content--navmenu-body">
+              <div class="sidemenu-list">
+
+                <div class="row-pembelian-paket-aktif">
+                  <div class="row-pembelian-paket-aktif">
+                    <div class="tx-logo" aria-hidden="true">
+                      <svg class="row-pembelian-paket-aktif-body-logo" width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 11V6C9 4.34315 10.3431 3 12 3C13.6569 3 15 4.34315 15 6V10.9673M10.4 21H13.6C15.8402 21 16.9603 21 17.816 20.564C18.5686 20.1805 19.1805 19.5686 19.564 18.816C20 17.9603 20 16.8402 20 14.6V12.2C20 11.0799 20 10.5198 19.782 10.092C19.5903 9.71569 19.2843 9.40973 18.908 9.21799C18.4802 9 17.9201 9 16.8 9H7.2C6.0799 9 5.51984 9 5.09202 9.21799C4.71569 9.40973 4.40973 9.71569 4.21799 10.092C4 10.5198 4 11.0799 4 12.2V14.6C4 16.8402 4 17.9603 4.43597 18.816C4.81947 19.5686 5.43139 20.1805 6.18404 20.564C7.03968 21 8.15979 21 10.4 21Z" stroke="#bababa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </div>
+                    <div class="row-pembelian-paket-aktif-body-main">
+                      <div class="row-pembelian-paket-aktif-paket">
+                        Program Bimbel SKB Kementrian ESDM CPNS 2024 - Masa Aktif 1 Bulan
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -874,35 +939,38 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4781b0" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6l9-3 9 3M3 18l9 3 9-3"/></svg>
               Journey
             </div>
-            <div class="search-bar">
-              <input type="search" placeholder="Cari Journey...">
-              <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            </div>
-            <div class="sidemenu-list">
-              <div class="row">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
-                <div class="row-body">
-                  <span class="row-title">Road to CPNS</span>
-                  <div class="row-meta">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span>0/14 section telah dikerjakan</span>
-                  </div>
-                </div>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            <div class="page-content--sidemenu-body">
+              <div class="search-bar">
+                <input type="search" placeholder="Cari Journey...">
+                <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
               </div>
-              <div class="row">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
-                <div class="row-body">
-                  <span class="row-title">Road to CPNS Premium</span>
-                  <div class="row-meta">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span>0/20 section telah dikerjakan</span>
+              <div class="sidemenu-list">
+                <div class="row">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                  <div class="row-body">
+                    <span class="row-title">Road to CPNS</span>
+                    <div class="row-meta">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      <span>0/14 section telah dikerjakan</span>
+                    </div>
                   </div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-              </div>
+                <div class="row">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                  <div class="row-body">
+                    <span class="row-title">Road to CPNS Premium</span>
+                    <div class="row-meta">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      <span>0/20 section telah dikerjakan</span>
+                    </div>
+                  </div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
 
+              </div>
             </div>
+
           </div>
         </div>
 
@@ -913,36 +981,39 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4781b0" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
               Latihan Soal
             </div>
-            <div class="search-bar">
-              <input type="search" placeholder="Cari Latihan Soal...">
-              <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            </div>
-            <div class="sidemenu-list">
-              <div class="row">
-                <span class="row-badge">Free</span>
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
-                <div class="row-body">
-                  <span class="row-title">TIU Numerik Deret Angka</span>
-                  <div class="row-meta">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span>0/30 latihan soal telah dikerjakan</span>
-                  </div>
-                </div>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            <div class="page-content--sidemenu-body">
+              <div class="search-bar">
+                <input type="search" placeholder="Cari Latihan Soal...">
+                <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
               </div>
-              <div class="row">
-                <span class="row-badge">Free</span>
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
-                <div class="row-body">
-                  <span class="row-title">TWK Integritas</span>
-                  <div class="row-meta">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span>0/20 latihan soal telah dikerjakan</span>
+              <div class="sidemenu-list">
+                <div class="row">
+                  <span class="row-badge">Free</span>
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                  <div class="row-body">
+                    <span class="row-title">TIU Numerik Deret Angka</span>
+                    <div class="row-meta">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      <span>0/30 latihan soal telah dikerjakan</span>
+                    </div>
                   </div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                <div class="row">
+                  <span class="row-badge">Free</span>
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                  <div class="row-body">
+                    <span class="row-title">TWK Integritas</span>
+                    <div class="row-meta">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      <span>0/20 latihan soal telah dikerjakan</span>
+                    </div>
+                  </div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -953,34 +1024,39 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4781b0" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
               Materi
             </div>
-            <div class="search-bar">
-              <input type="search" placeholder="Cari Materi...">
-              <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            </div>
-            <div class="sidemenu-list">
-              <div class="row">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
-                <div class="row-body">
-                  <span class="row-title">Tips Persiapan Menjelang Ujian</span>
-                  <div class="row-meta">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span>1 Bab</span>
-                  </div>
-                </div>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            <div class="page-content--sidemenu-body">
+
+              <div class="search-bar">
+                <input type="search" placeholder="Cari Materi...">
+                <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
               </div>
-              <div class="row">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
-                <div class="row-body">
-                  <span class="row-title">Tes Intelegensi Umum (TIU)</span>
-                  <div class="row-meta">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span>11 Bab</span>
+              <div class="sidemenu-list">
+                <div class="row">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                  <div class="row-body">
+                    <span class="row-title">Tips Persiapan Menjelang Ujian</span>
+                    <div class="row-meta">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      <span>1 Bab</span>
+                    </div>
                   </div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                <div class="row">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="2"/></svg>
+                  <div class="row-body">
+                    <span class="row-title">Tes Intelegensi Umum (TIU)</span>
+                    <div class="row-meta">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      <span>11 Bab</span>
+                    </div>
+                  </div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
               </div>
+
             </div>
+
           </div>
         </div>
 
@@ -991,27 +1067,32 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4781b0" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
               Try Out
             </div>
-            <div class="search-bar">
-              <input type="search" placeholder="Cari Try Out...">
-              <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            </div>
-            <div class="sidemenu-list">
-              <div class="row">
-                <span class="row-badge">Free</span>
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00d370" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="#00d370" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="row-body">
-                  <span class="row-title">Tryout SKD CPNS 2026</span>
-                  <div class="row-meta">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#bababa" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                    <span>5.659 peserta</span>
+
+            <div class="page-content--sidemenu-body">
+              <div class="search-bar">
+                <input type="search" placeholder="Cari Try Out...">
+                <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+              </div>
+              <div class="sidemenu-list">
+                <div class="row">
+                  <span class="row-badge">Free</span>
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00d370" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="#00d370" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="row-body">
+                    <span class="row-title">Tryout SKD CPNS 2026</span>
+                    <div class="row-meta">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#bababa" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                      <span>5.659 peserta</span>
+                    </div>
                   </div>
-                </div>
-                <div class="row-actions">
-                  <span class="score-pill">Nilai: 0</span>
-                  <span class="review-link">Lihat Pembahasan ›</span>
+                  <div class="row-actions">
+                    <span class="score-pill">Nilai: 0</span>
+                    <span class="review-link">Lihat Pembahasan ›</span>
+                  </div>
                 </div>
               </div>
             </div>
+
+
           </div>
         </div>
 
@@ -1030,13 +1111,13 @@
             <div class="profile-email">hanggar@example.com</div>
           </div>
         </div>
-        <div class="stats-card">
+        <!-- <div class="stats-card">
           <h3>Statistik Belajar</h3>
           <div class="stat-row"><span>Total Soal Dikerjakan</span><span class="stat-val">0</span></div>
           <div class="stat-row"><span>Try Out Selesai</span><span class="stat-val">1</span></div>
           <div class="stat-row"><span>Hari Berturut-turut</span><span class="stat-val">0</span></div>
           <div class="stat-row"><span>Nilai Tertinggi</span><span class="stat-val">0</span></div>
-        </div>
+        </div> -->
       </aside>
 
     </div>
@@ -1099,6 +1180,28 @@
       clearAllHighlights();
       document.querySelectorAll(`.sidebar-item[data-side="${side}"]`).forEach(el => el.classList.add('active'));
       showPage(side);
+    }
+
+    // PEMBELIAN TAB
+    function clearAllPembelianHighlights() {
+      document.querySelectorAll('.tab-pembelian-btn').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.page-content--navmenu-body').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.mobile-tab').forEach(el => el.classList.remove('active'));
+    }
+
+    function showPembelianPage(id) {
+      document.querySelectorAll('.page-pembelian').forEach(p => p.classList.remove('active'));
+      const el = document.getElementById('page-pembelian-' + id);
+      if (el) el.classList.add('active');
+      console.log("show pembelian page", id)
+    }
+
+    function switchPembelianNav(e, nav) {
+      console.log("clicked " +nav);
+      if (e) e.preventDefault();
+      clearAllPembelianHighlights();
+      document.querySelectorAll(`.tab-pembelian-btn[data-nav="${nav}"]`).forEach(el => el.classList.add('active'));
+      showPembelianPage(nav);
     }
 
     // ── Mobile sidebar drawer (hamburger) ──
