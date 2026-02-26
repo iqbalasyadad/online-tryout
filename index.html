@@ -1428,11 +1428,9 @@
       document.querySelectorAll('.page-aktivitas').forEach(p => p.classList.remove('active'));
       const el = document.getElementById('page-aktivitas-' + id);
       if (el) el.classList.add('active');
-      console.log("show aktivitas page", id)
     }
 
     function switchAktivitasNav(e, nav) {
-      console.log("clicked " +nav);
       if (e) e.preventDefault();
       clearAllAktivitasHighlights();
       document.querySelectorAll(`.tab-aktivitas-btn[data-nav="${nav}"]`).forEach(el => el.classList.add('active'));
@@ -1450,11 +1448,9 @@
       document.querySelectorAll('.page-pembelian').forEach(p => p.classList.remove('active'));
       const el = document.getElementById('page-pembelian-' + id);
       if (el) el.classList.add('active');
-      console.log("show pembelian page", id)
     }
 
     function switchPembelianNav(e, nav) {
-      console.log("clicked " +nav);
       if (e) e.preventDefault();
       clearAllPembelianHighlights();
       document.querySelectorAll(`.tab-pembelian-btn[data-nav="${nav}"]`).forEach(el => el.classList.add('active'));
