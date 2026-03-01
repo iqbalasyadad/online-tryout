@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Oase Learning{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/css/main.css"/>
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+  <!-- htmx history plugin: keeps full-page in cache for back/forward -->
+  <meta name="htmx-config" content='{"historyCacheSize": 10}' />
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════
+       TOP NAVBAR (tetap, tidak pernah swap)
+  ════════════════════════════════════════ -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <button class="nav-hamburger" id="hamburger-btn" aria-label="Toggle menu" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <a class="nav-logo" href="{% url 'home' %}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="3"  y="3"  width="8" height="8" rx="2" fill="#4781b0"/>
+          <rect x="13" y="3"  width="8" height="8" rx="2" fill="#4781b0" opacity="0.45"/>
+          <rect x="3"  y="13" width="8" height="8" rx="2" fill="#4781b0" opacity="0.45"/>
+          <rect x="13" y="13" width="8" height="8" rx="2" fill="#4781b0"/>
+        </svg>
+        Oase Learning
+      </a>
+
+      <!-- Nav links desktop — pakai hx-push-url agar URL berubah -->
+      <div class="nav-links-desktop" style="display:flex;align-items:center;gap:2px;">
+        <a class="nav-link {% if active_page == 'home' %}active{% endif %}"
+           href="{% url 'home' %}"
+           hx-get="{% url 'home' %}"
+           hx-target="#main-content"
+           hx-push-url="true"
+           hx-swap="innerHTML"
+           onclick="setActiveNav(this)">Beranda</a>
+
+        <a class="nav-link {% if active_page == 'activity' %}active{% endif %}"
+           href="{% url 'activity' %}"
+           hx-get="{% url 'activity' %}"
+           hx-target="#main-content"
+           hx-push-url="true"
+           hx-swap="innerHTML"
+           onclick="setActiveNav(this)">Aktivitas</a>
+
+        <a class="nav-link {% if active_page == 'purchase' %}active{% endif %}"
+           href="{% url 'purchase' %}"
+           hx-get="{% url 'purchase' %}"
+           hx-target="#main-content"
+           hx-push-url="true"
+           hx-swap="innerHTML"
+           onclick="setActiveNav(this)">Pembelian</a>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <!-- Mode Selector -->
+      <div class="nav-dropdown" id="dropdown-mode">
+        <button class="nav-dropdown-btn" onclick="toggleDropdown('mode')">
+          Mode: <span id="mode-label">CPNS</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown-menu">
+          <div class="nav-dropdown-item selected" onclick="selectMode('CPNS')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            CPNS
+          </div>
+          <div class="nav-dropdown-item" onclick="selectMode('BUMN')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+            BUMN
+          </div>
+          <div class="nav-dropdown-item" onclick="selectMode('TOEFL')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            TOEFL
+          </div>
+        </div>
+      </div>
+
+      <!-- Language Selector -->
+      <div class="nav-dropdown" id="dropdown-lang">
+        <button class="nav-dropdown-btn" onclick="toggleDropdown('lang')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span id="lang-label">Indonesia</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown-menu">
+          <div class="nav-dropdown-item selected" onclick="selectLanguage('Indonesia')">🇮🇩 Indonesia</div>
+          <div class="nav-dropdown-item" onclick="selectLanguage('English')">🇬🇧 English</div>
+        </div>
+      </div>
+
+      <a class="nav-link {% if active_page == 'account' %}active{% endif %}"
+         href="{% url 'account' %}"
+         hx-get="{% url 'account' %}"
+         hx-target="#main-content"
+         hx-push-url="true"
+         hx-swap="innerHTML">Akun</a>
+    </div>
+  </nav>
+
+  <!-- Backdrop dropdown -->
+  <div class="dropdown-backdrop" id="dropdown-backdrop" onclick="closeAllDropdowns()"></div>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- ════════════════════════════════════════
+       LAYOUT
+  ════════════════════════════════════════ -->
+  <div class="layout-container">
+    <div class="layout">
+
+      <!-- SIDEBAR KIRI (tetap, tidak pernah swap) -->
+      <aside class="sidebar-left" id="sidebar-left">
+        <div class="sidebar-nav">
+
+          <a class="sidebar-item {% if active_page == 'journey' %}active{% endif %}"
+             href="{% url 'journey' %}"
+             hx-get="{% url 'journey' %}"
+             hx-target="#main-content"
+             hx-push-url="true"
+             hx-swap="innerHTML"
+             onclick="setSidebarActive(this)">
+            <span class="sidebar-item-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M3 12h18M3 6l9-3 9 3M3 18l9 3 9-3"/>
+              </svg>
+            </span>
+            Journey
+          </a>
+
+          <a class="sidebar-item {% if active_page == 'practice' %}active{% endif %}"
+             href="{% url 'practice' %}"
+             hx-get="{% url 'practice' %}"
+             hx-target="#main-content"
+             hx-push-url="true"
+             hx-swap="innerHTML"
+             onclick="setSidebarActive(this)">
+            <span class="sidebar-item-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+            </span>
+            Latihan Soal
+          </a>
+
+          <a class="sidebar-item {% if active_page == 'materials' %}active{% endif %}"
+             href="{% url 'materials' %}"
+             hx-get="{% url 'materials' %}"
+             hx-target="#main-content"
+             hx-push-url="true"
+             hx-swap="innerHTML"
+             onclick="setSidebarActive(this)">
+            <span class="sidebar-item-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </span>
+            Materi
+          </a>
+
+          <a class="sidebar-item {% if active_page == 'tryout' %}active{% endif %}"
+             href="{% url 'tryout' %}"
+             hx-get="{% url 'tryout' %}"
+             hx-target="#main-content"
+             hx-push-url="true"
+             hx-swap="innerHTML"
+             onclick="setSidebarActive(this)">
+            <span class="sidebar-item-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="6"/>
+                <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+              </svg>
+            </span>
+            Try Out
+          </a>
+
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT — ini yang di-swap HTMX -->
+      <main class="main-content">
+        <div id="main-content" class="main-content-inner">
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+
+      <!-- SIDEBAR KANAN (tetap) -->
+      <aside class="sidebar-right">
+        <div class="profile-card">
+          <div class="profile-avatar">
+            <svg width="20" height="20" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>
+          </div>
+          <div style="min-width:0;">
+            <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
+            <div class="profile-email">{{ user.email }}</div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM NAV (tetap) -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-tabs">
+      <a class="mobile-tab {% if active_page == 'home' %}active{% endif %}"
+         href="{% url 'home' %}"
+         hx-get="{% url 'home' %}"
+         hx-target="#main-content"
+         hx-push-url="true"
+         hx-swap="innerHTML">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Beranda
+      </a>
+      <a class="mobile-tab {% if active_page == 'activity' %}active{% endif %}"
+         href="{% url 'activity' %}"
+         hx-get="{% url 'activity' %}"
+         hx-target="#main-content"
+         hx-push-url="true"
+         hx-swap="innerHTML">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Aktivitas
+      </a>
+      <a class="mobile-tab {% if active_page == 'purchase' %}active{% endif %}"
+         href="{% url 'purchase' %}"
+         hx-get="{% url 'purchase' %}"
+         hx-target="#main-content"
+         hx-push-url="true"
+         hx-swap="innerHTML">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Pembelian
+      </a>
+      <a class="mobile-tab {% if active_page == 'account' %}active{% endif %}"
+         href="{% url 'account' %}"
+         hx-get="{% url 'account' %}"
+         hx-target="#main-content"
+         hx-push-url="true"
+         hx-swap="innerHTML">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Akun
+      </a>
+    </div>
+  </nav>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

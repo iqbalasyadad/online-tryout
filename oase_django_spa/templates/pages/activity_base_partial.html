@@ -1,0 +1,33 @@
+<div class="page-content--navmenu">
+  <nav class="tab-nav" role="tablist">
+    <a class="tab-btn {% if active_activity_tab == 'history' %}active{% endif %}"
+       href="{% url 'activity_history' %}"
+       hx-get="{% url 'activity_history' %}"
+       hx-target="#main-content"
+       hx-swap="innerHTML"
+       hx-push-url="true">
+      Riwayat
+    </a>
+
+    <a class="tab-btn {% if active_activity_tab == 'announcements' %}active{% endif %}"
+       href="{% url 'activity_announcements' %}"
+       hx-get="{% url 'activity_announcements' %}"
+       hx-target="#main-content"
+       hx-swap="innerHTML"
+       hx-push-url="true">
+      Pengumuman
+    </a>
+
+    <a class="tab-btn {% if active_activity_tab == 'my-report' %}active{% endif %}"
+       href="{% url 'activity_my_report' %}"
+       hx-get="{% url 'activity_my_report' %}"
+       hx-target="#main-content"
+       hx-swap="innerHTML"
+       hx-push-url="true">
+      Report Saya
+    </a>
+  </nav>
+
+  {# slot isi panel #}
+  {% block activity_panel %}{% endblock %}
+</div>

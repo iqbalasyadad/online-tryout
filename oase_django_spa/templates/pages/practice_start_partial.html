@@ -1,0 +1,35 @@
+<div class="page-content--sidemenu">
+  <div class="practice-page-start-header">
+    <a class="practice-page-link" href="{% url 'practice' %}" hx-get="{% url 'practice' %}" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">Latihan Soal</a>
+    <span> &gt; </span>
+    <a class="practice-page-link" href="{% url 'practice_topic' 1 %}" hx-get="{% url 'practice_topic' 1 %}" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">List</a>
+    <span> &gt; </span>
+    <span class="practice-page-link">Test {{ test_id }}</span>
+  </div>
+
+  <div class="sidemenu-body">
+    Tes terdiri dari:
+    <div class="card" style="margin-top:10px;">
+      <div class="section-topic-title">Seleksi Kompetensi Dasar (SKD)</div>
+      <div class="item-topic-meta" style="margin-top:8px;">
+        <span>30 Soal</span>
+        <span>30 Menit</span>
+        <span>65 Poin</span>
+      </div>
+      <div class="topic-badges">
+        <span class="topic-badge topic-badge-hot">🔥 29 Hots 🔥</span>
+        <span class="topic-badge topic-badge-med">1 Medium</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-practice-footer">
+    <div class="page-practice-analysis-card">
+      <span><strong>Kamu bisa melihat rangking, Pembahasan video dan download soal</strong></span>
+      <button class="page-practice-analysis-btn" type="button">Lihat Analisis</button>
+    </div>
+    <span><strong>Sisa percobaan: </strong>3x</span>
+    <span>*) Kamu dapat mengulang mengerjakan Tryout ini sebanyak 3x percobaan</span>
+    <button class="practice-start-btn" type="button">Mulai</button>
+  </div>
+</div>

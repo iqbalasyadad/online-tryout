@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Oase Learning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+  {% include "partials/topnav.html" %}
+  <div class="dropdown-backdrop" id="dropdown-backdrop"></div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="layout-container">
+    <div class="layout">
+      {% include "partials/sidebar_left.html" %}
+
+      <main class="main-content">
+        <div id="main-content" class="page active">
+          {% block main %}{% endblock %}
+        </div>
+      </main>
+
+      {% include "partials/sidebar_right.html" %}
+    </div>
+  </div>
+
+  {% include "partials/mobile_bottom_nav.html" %}
+
+  <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

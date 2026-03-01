@@ -1,0 +1,32 @@
+<div class="page-content--navmenu">
+  <nav class="tab-nav" role="tablist">
+    <a class="tab-btn {% if active_purchase_tab == 'buy' %}active{% endif %}"
+       href="{% url 'purchase_buy' %}"
+       hx-get="{% url 'purchase_buy' %}"
+       hx-target="#main-content"
+       hx-swap="innerHTML"
+       hx-push-url="true">
+      Beli Paket
+    </a>
+
+    <a class="tab-btn {% if active_purchase_tab == 'history' %}active{% endif %}"
+       href="{% url 'purchase_history' %}"
+       hx-get="{% url 'purchase_history' %}"
+       hx-target="#main-content"
+       hx-swap="innerHTML"
+       hx-push-url="true">
+      Riwayat
+    </a>
+
+    <a class="tab-btn {% if active_purchase_tab == 'active' %}active{% endif %}"
+       href="{% url 'purchase_active' %}"
+       hx-get="{% url 'purchase_active' %}"
+       hx-target="#main-content"
+       hx-swap="innerHTML"
+       hx-push-url="true">
+      Paket Aktif
+    </a>
+  </nav>
+
+  {% block purchase_panel %}{% endblock %}
+</div>

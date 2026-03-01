@@ -1,0 +1,60 @@
+<nav class="top-nav">
+  <div class="nav-left">
+    <button class="nav-hamburger" id="hamburger-btn" aria-label="Toggle menu" data-action="toggleSidebar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+
+    <a class="nav-logo" href="{% url 'home' %}"
+       hx-get="{% url 'home' %}" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <rect x="3"  y="3"  width="8" height="8" rx="2" fill="#4781b0"/>
+        <rect x="13" y="3"  width="8" height="8" rx="2" fill="#4781b0" opacity="0.45"/>
+        <rect x="3"  y="13" width="8" height="8" rx="2" fill="#4781b0" opacity="0.45"/>
+        <rect x="13" y="13" width="8" height="8" rx="2" fill="#4781b0"/>
+      </svg>
+      Oase Learning
+    </a>
+
+    <div class="nav-links-desktop" style="display:flex;align-items:center;gap:2px;">
+      <a class="nav-link {% if active_top == 'home' %}active{% endif %}" data-nav="home"
+         href="{% url 'home' %}" hx-get="{% url 'home' %}" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">Beranda</a>
+      <a class="nav-link {% if active_top == 'activity' %}active{% endif %}" data-nav="activity"
+         href="{% url 'activity' %}" hx-get="{% url 'activity' %}" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">Aktivitas</a>
+      <a class="nav-link {% if active_top == 'purchase' %}active{% endif %}" data-nav="purchase"
+         href="{% url 'purchase' %}" hx-get="{% url 'purchase' %}" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">Pembelian</a>
+    </div>
+  </div>
+
+  <div class="nav-right">
+    <div class="nav-dropdown" id="dropdown-mode">
+      <button class="nav-dropdown-btn" data-action="toggleDropdown" data-dropdown="mode">
+        Mode: <span id="mode-label">CPNS</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu">
+        <div class="nav-dropdown-item selected" data-action="selectMode" data-value="CPNS">CPNS</div>
+        <div class="nav-dropdown-item" data-action="selectMode" data-value="BUMN">BUMN</div>
+        <div class="nav-dropdown-item" data-action="selectMode" data-value="TOEFL">TOEFL</div>
+      </div>
+    </div>
+
+    <div class="nav-dropdown" id="dropdown-lang">
+      <button class="nav-dropdown-btn" data-action="toggleDropdown" data-dropdown="lang">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span id="lang-label">Indonesia</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu">
+        <div class="nav-dropdown-item selected" data-action="selectLanguage" data-value="Indonesia">🇮🇩 Indonesia</div>
+        <div class="nav-dropdown-item" data-action="selectLanguage" data-value="English">🇬🇧 English</div>
+      </div>
+    </div>
+
+    <a class="nav-link {% if active_top == 'account' %}active{% endif %}" data-nav="account"
+       href="{% url 'account' %}" hx-get="{% url 'account' %}" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">Akun</a>
+  </div>
+</nav>
