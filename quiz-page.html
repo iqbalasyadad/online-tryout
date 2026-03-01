@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz CPNS 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #f5f6f8;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── NAVBAR ── */
+  .navbar {
+    background: #fff;
+    border-bottom: 1px solid #e2e5ea;
+    padding: 0 1.25rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1a2d45;
+    letter-spacing: 0.05em;
+  }
+
+  /* Hamburger — mobile only */
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1a2d45;
+    border-radius: 2px;
+  }
+
+  .timer {
+    border: 2px solid #1a2d45;
+    border-radius: 8px;
+    padding: 5px 14px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1a2d45;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .timer.danger { color: #ef4444; border-color: #ef4444; }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    align-items: stretch;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: #fff;
+    border: 1px solid #e2e5ea;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    position: sticky;
+
+    /* Height = viewport - navbar - padding */
+    height: calc(100vh - 80px);
+    overflow: hidden;
+  }
+
+  .sidebar-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1a2d45;
+    flex-shrink: 0;
+  }
+
+  .sidebar-meta {
+    font-size: 0.72rem;
+    color: #7a8499;
+    margin-top: 2px;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 0.7rem;
+    color: #4a5568;
+    flex-shrink: 0;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-green  { background: #22c55e; }
+  .dot-red    { background: #ef4444; }
+  .dot-yellow { background: #eab308; }
+  .dot-blue   { background: #3b82f6; }
+
+  /* Scrollable grid wrapper — takes all remaining space */
+  .number-grid-wrapper {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    padding-right: 3px;
+  }
+
+  .number-grid-wrapper::-webkit-scrollbar { width: 4px; }
+  .number-grid-wrapper::-webkit-scrollbar-track { background: #f1f3f5; border-radius: 4px; }
+  .number-grid-wrapper::-webkit-scrollbar-thumb { background: #c4c9d4; border-radius: 4px; }
+
+  .number-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+  }
+
+  .num-btn {
+    aspect-ratio: 1;
+    border: none;
+    border-radius: 7px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .num-btn:hover { opacity: 0.82; transform: scale(1.07); }
+  .num-btn.answered { background: #22c55e; }
+  .num-btn.blank    { background: #ef4444; }
+  .num-btn.flagged  { background: #eab308; }
+  .num-btn.current  { background: #3b82f6; box-shadow: 0 0 0 2px #93c5fd; }
+
+  .sidebar-footer {
+    padding-top: 0.75rem;
+    border-top: 1px solid #e2e5ea;
+    flex-shrink: 0;
+  }
+
+  .btn-finish {
+    width: 100%;
+    padding: 11px;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-finish:hover { background: #2563eb; }
+
+  /* ── QUESTION AREA ── */
+  .question-area {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #e2e5ea;
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    min-width: 0;
+    overflow-y: auto;
+    max-height: 100%;
+  }
+
+  .question-text {
+    font-size: 0.975rem;
+    font-weight: 600;
+    color: #1a2d45;
+    line-height: 1.65;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .option-label {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    padding: 11px 15px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #374151;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+
+  .option-label:hover { border-color: #3b82f6; background: #eff6ff; }
+  .option-label input[type="radio"] { display: none; }
+  .option-label.selected {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    border: 1.5px solid #d1d5db;
+    background: #fff;
+    color: #374151;
+  }
+
+  .btn:hover { border-color: #9ca3af; background: #f9fafb; }
+
+  /* ── MOBILE DRAWER OVERLAY ── */
+  .drawer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+
+  .drawer-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── RESPONSIVE: TABLET ── */
+  @media (max-width: 900px) {
+    .sidebar { width: 210px; }
+  }
+
+  /* ── RESPONSIVE: MOBILE ── */
+  @media (max-width: 700px) {
+
+    .hamburger { display: flex; }
+
+    .main {
+      padding: 0.75rem;
+      flex-direction: column;
+    }
+
+    /* Sidebar becomes a fixed slide-in drawer */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 280px;
+      border-radius: 0 16px 16px 0;
+      z-index: 200;
+      transform: translateX(-100%);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100vh;
+      padding-top: 1.5rem;
+    }
+
+    .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.15); }
+
+    .drawer-overlay { display: block; }
+
+    /* Full-width question card */
+    .question-area {
+      padding: 1.25rem 1rem;
+      width: 100%;
+    }
+
+    .actions { justify-content: space-between; }
+
+    .btn {
+      flex: 1;
+      text-align: center;
+      padding: 9px 6px;
+      font-size: 0.78rem;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .timer { font-size: 0.75rem; padding: 4px 10px; }
+    .question-text { font-size: 0.88rem; }
+    .option-label { font-size: 0.8rem; padding: 10px 12px; }
+    .btn { font-size: 0.74rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DRAWER OVERLAY -->
+<div class="drawer-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-left">
+    <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Buka menu soal">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="logo">LOGO</div>
+  </div>
+  <div class="timer" id="timer">Time: 50m 00s</div>
+</nav>
+
+<!-- MAIN LAYOUT -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div style="flex-shrink:0">
+      <div class="sidebar-title">1 Try Out CPNS 2026</div>
+      <div class="sidebar-meta">50 Questions | 50 minutes | 100 points</div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="dot dot-green"></div> Answered (<span id="count-answered">0</span>)</div>
+      <div class="legend-item"><div class="dot dot-red"></div> Blank (<span id="count-blank">0</span>)</div>
+      <div class="legend-item"><div class="dot dot-yellow"></div> Flagged (<span id="count-flagged">0</span>)</div>
+      <div class="legend-item"><div class="dot dot-blue"></div> Current</div>
+    </div>
+
+    <div class="number-grid-wrapper">
+      <div class="number-grid" id="number-grid"></div>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="btn-finish">Finish</button>
+    </div>
+  </aside>
+
+  <!-- QUESTION AREA -->
+  <section class="question-area">
+    <div class="question-text" id="question-text"></div>
+
+    <div class="options" id="options">
+      <label class="option-label" onclick="selectOption(this)">
+        <input type="radio" name="option" value="A"> A. Kudus
+      </label>
+      <label class="option-label" onclick="selectOption(this)">
+        <input type="radio" name="option" value="B"> B. Semarang
+      </label>
+      <label class="option-label" onclick="selectOption(this)">
+        <input type="radio" name="option" value="C"> C. Cilacap
+      </label>
+      <label class="option-label" onclick="selectOption(this)">
+        <input type="radio" name="option" value="D"> D. Solo
+      </label>
+      <label class="option-label" onclick="selectOption(this)">
+        <input type="radio" name="option" value="E"> E. Klaten
+      </label>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="navigate(-1)">&lt; Back</button>
+      <button class="btn" id="btn-flag" onclick="flagQuestion()">Flag</button>
+      <button class="btn" onclick="clearSelection()">Clear</button>
+      <button class="btn" onclick="navigate(1)">Next &gt;</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const TOTAL = 250;
+  const statuses = {};
+  let currentQ = 6;
+
+  // Seed initial states
+  statuses[1] = 'answered';
+  statuses[2] = 'answered';
+  statuses[3] = 'answered';
+  statuses[4] = 'flagged';
+  statuses[5] = 'flagged';
+  for (let i = 6; i <= TOTAL; i++) statuses[i] = 'blank';
+
+  function updateCounts() {
+    let a = 0, b = 0, f = 0;
+    for (let i = 1; i <= TOTAL; i++) {
+      const s = statuses[i];
+      if (i === currentQ) continue;
+      if (s === 'answered') a++;
+      else if (s === 'blank') b++;
+      else if (s === 'flagged') f++;
+    }
+    document.getElementById('count-answered').textContent = a;
+    document.getElementById('count-blank').textContent = b;
+    document.getElementById('count-flagged').textContent = f;
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('number-grid');
+    grid.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const btn = document.createElement('button');
+      const cls = i === currentQ ? 'current' : statuses[i];
+      btn.className = `num-btn ${cls}`;
+      btn.textContent = i;
+      btn.onclick = () => goTo(i);
+      grid.appendChild(btn);
+    }
+    updateCounts();
+  }
+
+  function goTo(n) {
+    currentQ = n;
+    renderGrid();
+    document.getElementById('question-text').textContent = `${n}.  Di manakah ibu kota provinsi Jawa Tengah?`;
+    clearSelection();
+    // Re-apply answer highlight if already answered
+    closeSidebar();
+  }
+
+  function navigate(dir) {
+    const next = currentQ + dir;
+    if (next < 1 || next > TOTAL) return;
+    goTo(next);
+  }
+
+  function selectOption(el) {
+    document.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+    statuses[currentQ] = 'answered';
+    renderGrid();
+  }
+
+  function clearSelection() {
+    document.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+    document.querySelectorAll('input[name="option"]').forEach(i => i.checked = false);
+  }
+
+  function flagQuestion() {
+    statuses[currentQ] = 'flagged';
+    renderGrid();
+    const btn = document.getElementById('btn-flag');
+    btn.style.background = '#fef08a';
+    btn.style.borderColor = '#eab308';
+    setTimeout(() => { btn.style.background = ''; btn.style.borderColor = ''; }, 500);
+  }
+
+  function toggleSidebar() {
+    const s = document.getElementById('sidebar');
+    const o = document.getElementById('overlay');
+    const isOpen = s.classList.toggle('open');
+    o.classList.toggle('open', isOpen);
+  }
+
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+
+  // Countdown timer
+  let totalSeconds = 50 * 60;
+  const timerEl = document.getElementById('timer');
+  const tick = setInterval(() => {
+    if (totalSeconds <= 0) { clearInterval(tick); timerEl.textContent = 'Time: 00m 00s'; return; }
+    totalSeconds--;
+    const m = Math.floor(totalSeconds / 60);
+    const s = totalSeconds % 60;
+    timerEl.textContent = `Time: ${m}m ${s < 10 ? '0' + s : s}s`;
+    if (totalSeconds <= 5 * 60) timerEl.classList.add('danger');
+  }, 1000);
+
+  // Init
+  renderGrid();
+  document.getElementById('question-text').textContent = `${currentQ}.  Di manakah ibu kota provinsi Jawa Tengah?`;
+</script>
+</body>
+</html>
